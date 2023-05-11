@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router()
-const { Event } = require('../models')
+const { Event, Schedule } = require('../models')
+const {DateTime} = require('luxon');
 
 router.get('/', async (req, res)=> {
     const allEvents = await Event.findAll()
@@ -15,9 +16,14 @@ router.get('/:id', async (req, res)=> {
 
 router.post("/", async (req, res)=> {
     const post = req.body
+    dt = DateTime.fromISO(post.time)
+    
+    post.time = dt.toFormat("yyyy-MM-dd hh:mm:ss")
 
-    await Event.create(post)
-    res.json(post)
+    post.EventId = post.id
+    await Event.create(post)   //mao ni ang post nga gi insert
+    await Schedule.create(post)//same sad ani
+    res.json(post) //mao ni output sa preview same variable nga 'post'
 })
 
 module.exports = router

@@ -7,14 +7,7 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        event_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-        },
-        category_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-        },
+
     }, {
         // Options
         paranoid: true, //deleted at

@@ -6,14 +6,6 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        organizer_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false
-        },
-        approver_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false
-        },
         eventName: {
             type: DataTypes.STRING,
             allowNull: false
@@ -25,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         paranoid: true
     });
+
+    Event.associate = (models) => {
+        Event.hasMany(models.Schedule, {
+            onUpdate: "cascade"
+        })
+    }
 
     return Event
 }

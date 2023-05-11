@@ -7,14 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        user_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-        },
-        role_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-        },
         // timestamps enabled by default in sequelize
         
         

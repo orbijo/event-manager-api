@@ -7,15 +7,10 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        event_id: {
-            type: DataTypes.BIGINT.UNSIGNED,
-            allowNull: false,
-        },
         time: {
             type: DataTypes.DATE,
             allowNull: false
         },
-        attendedAt: DataTypes.DATE,
         // timestamps enabled by default in sequelize
         
         
