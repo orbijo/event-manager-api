@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const { Event, Schedule } = require('../models')
-const {DateTime} = require('luxon');
+const {validateToken} = require("../middlewares/AuthMiddleware")
 
 router.get('/', async (req, res)=> {
     const allEvents = await Event.findAll()
@@ -14,16 +14,10 @@ router.get('/:id', async (req, res)=> {
     res.json(event)
 })
 
-router.post("/", async (req, res)=> {
+router.post("/", validateToken, async (req, res)=> {
     const post = req.body
-    dt = DateTime.fromISO(post.time)
-    
-    post.time = dt.toFormat("yyyy-MM-dd hh:mm:ss")
-
-    post.EventId = post.id
-    await Event.create(post)   //mao ni ang post nga gi insert
-    await Schedule.create(post)//same sad ani
-    res.json(post) //mao ni output sa preview same variable nga 'post'
+    await Event.create(post)
+    res.json(post)
 })
 
 module.exports = router
