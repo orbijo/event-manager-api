@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { Event, Schedule } = require('../models')
 const {validateToken} = require("../middlewares/AuthMiddleware")
+const {DateTime} = require('luxon');
 
 router.get('/', async (req, res)=> {
     const allEvents = await Event.findAll()
@@ -14,10 +15,27 @@ router.get('/:id', async (req, res)=> {
     res.json(event)
 })
 
-router.post("/", validateToken, async (req, res)=> {
-    const post = req.body
-    await Event.create(post)
-    res.json(post)
+router.post("/", async (req, res)=> {
+    const {
+        eventName,
+        description,
+        schedule
+    } = req.body
+    
+    dt = DateTime.fromISO(schedule, {zone: 'utc'})
+    
+    formattedSched = dt.toFormat("yyyy-MM-dd hh:mm:ss")
+
+    await Event.create({
+        eventName: eventName,
+        description: description,
+        schedule: formattedSched
+    })
+    res.json({
+        eventName: eventName,
+        description: description,
+        schedule: formattedSched
+    })
 })
 
 module.exports = router

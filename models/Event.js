@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+        schedule: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
     }, {
         paranoid: true
     });
