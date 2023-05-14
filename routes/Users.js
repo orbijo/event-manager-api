@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 const { User } = require('../models')
 const bcrypt = require('bcrypt');
-
+const {validateToken} = require("../middlewares/AuthMiddleware")
 const { sign } = require('jsonwebtoken')
 
 router.post('/', async (req, res) => {
@@ -24,23 +24,37 @@ router.post('/', async (req, res) => {
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email: email } });
+    try {
+        const user = await User.findOne({ where: { email: email } });
 
-    if (!user) {
-        res.json({ error: "User Not Found" });
-    } else {
-        bcrypt.compare(password, user.password).then((match) => {
-            if (!match) {
-                res.json({ error: "Wrong Username And Password Combination" });
-            } else {
-                const accessToken = sign(
-                    { email: user.email, id: user.id },
-                    "secretphrase"
-                );
-                res.json(accessToken);
-            }
-        });
+        if (!user) {
+            return res.json({ error: "User Not Found" });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+            return res.json({ error: "Wrong Username And Password Combination" });
+        }
+
+        // Fetch the user's roles
+        const roles = await user.fetchRoles();
+
+        const accessToken = sign(
+            {
+                email: user.email, id: user.id, roles: roles.map(role => role.title)
+            }, "secretphrase"
+        );
+
+        return res.json(accessToken);
+    } catch (error) {
+        // Handle any errors that occurred during the process
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+router.get('/validate', validateToken, (req, res) => {
+    res.json(req.user)
+})
 
 module.exports = router

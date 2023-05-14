@@ -45,7 +45,23 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         paranoid: true  //deleted at
     });
-    
+
+    User.associate = (models) => {
+        User.belongsToMany(models.Event, {
+            through: 'EventParticipant',
+            as: 'ParticipatedEvents'
+        });
+        User.belongsToMany(models.Role, {
+            through: 'UserRole',
+            as: 'roles'
+        });
+    };
+
+    User.prototype.fetchRoles = async function () {
+        const roles = await this.getRoles();
+        return roles;
+    };
+
     return User
 
 }

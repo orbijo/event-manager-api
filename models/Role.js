@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
+    Role.associate = (models) => {
+        Role.belongsToMany(models.User, {
+            through: 'UserRole',
+        });
+    };
+
     return Role
 
 }
