@@ -10,6 +10,7 @@ const validateToken = (req, res, next) => {
     else {
         try {
             const validToken = verify(accessToken, "secretphrase")
+            req.user = validToken
             if (validToken) {
                 return next();
             }

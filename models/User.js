@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         paranoid: true  //deleted at
     });
-
+    
     return User
 
 }

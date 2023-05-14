@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false
         },
+
     }, {
         paranoid: true
     });
@@ -25,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
     Event.associate = (models) => {
         Event.hasMany(models.Schedule, {
             onUpdate: "cascade"
+        })
+        Event.belongsTo(models.User, {
+            as: 'Organizer'
+        })
+        Event.belongsTo(models.User, {
+            as: 'Approver'
         })
     }
 
