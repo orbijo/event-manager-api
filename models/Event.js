@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        about: {
+            type: DataTypes.TEXT
+        },
         schedule: {
             type: DataTypes.DATE,
             allowNull: false
@@ -37,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
             as: 'Approver'
         });
         Event.belongsToMany(models.User, {
-            through: 'EventParticipant'
+            through: 'EventParticipant',
+            as: 'EventParticipants'
         });
     };
 

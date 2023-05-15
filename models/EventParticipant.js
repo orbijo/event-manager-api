@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         
     }, {
         // Options
-        paranoid: true, //deleted at
         tableName: 'Event_Participants'
     });
 
